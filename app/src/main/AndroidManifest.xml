@@ -38,6 +38,10 @@
             android:name=".WhereTo"
             android:label="@string/title_activity_where_to">
         </activity>
+        <activity
+            android:name=".Directions"
+            android:label="@string/title_activity_directions">
+        </activity>
     </application>
 
 </manifest>

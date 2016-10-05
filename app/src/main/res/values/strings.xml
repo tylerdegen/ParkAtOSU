@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ParkAtOSU</string>
     <string name="title_activity_where_to">Map</string>
+    <string name="title_activity_directions">Map</string>
 </resources>
