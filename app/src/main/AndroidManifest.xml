@@ -15,6 +15,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".AccountActivity">
+        </activity>
+        <activity android:name=".AccountEditActivity">
+        </activity>
+        <activity android:name=".SetParkedActivity">
+        </activity>
+        <activity android:name=".LogoutActivity">
+        </activity>
     </application>
 
 </manifest>

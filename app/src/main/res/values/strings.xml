@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ParkAtOSU</string>
+    <string name="account_button">Account</string>
+    <string name="park_button">Go Park</string>
+    <string name="set_parked_button">Set Parked</string>
+    <string name="logout_button">Logout</string>
+    <string name="main_menu_header">Main Menu</string>
 </resources>
