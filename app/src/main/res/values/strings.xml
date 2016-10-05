@@ -21,4 +21,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="address">Address</string>
+    <string name="permits">Permits</string>
+    <string name="my_spot">My Spot</string>
+    <string name="edit_account_button">Edit Account</string>
 </resources>

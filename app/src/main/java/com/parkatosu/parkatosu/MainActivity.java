@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent i = SetParkedActivity.newIntent(MainActivity.this);
+                startActivity(i);
             }
         });
 
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent i = LogoutActivity.newIntent(MainActivity.this);
+                startActivity(i);
             }
         });
 
