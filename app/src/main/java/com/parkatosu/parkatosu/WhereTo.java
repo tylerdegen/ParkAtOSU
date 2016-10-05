@@ -1,5 +1,7 @@
 package com.parkatosu.parkatosu;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -14,6 +16,10 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
+    public static Intent newIntent(Context packageContext) {
+        Intent i = new Intent(packageContext, WhereTo.class);
+        return i;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
