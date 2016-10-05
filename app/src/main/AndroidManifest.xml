@@ -46,6 +46,10 @@
         </activity>
         <activity android:name=".LogoutActivity">
         </activity>
+        <activity
+            android:name=".Directions"
+            android:label="@string/title_activity_directions">
+        </activity>
     </application>
 
 </manifest>
