@@ -5,4 +5,5 @@
     <string name="set_parked_button">Set Parked</string>
     <string name="logout_button">Logout</string>
     <string name="main_menu_header">Main Menu</string>
+    <string name="title_activity_where_to">Map</string>
 </resources>
