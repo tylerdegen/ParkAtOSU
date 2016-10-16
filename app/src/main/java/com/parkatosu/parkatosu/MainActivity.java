@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mAccountButton = (Button) findViewById(R.id.account_button);
         mGoParkButton = (Button) findViewById(R.id.park_button);
         mSetParkedButton = (Button) findViewById(R.id.set_parked_button);

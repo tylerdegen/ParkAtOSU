@@ -19,23 +19,44 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/address"
-            android:textSize="24sp"
-            android:paddingBottom="50sp"/>
+            android:text="@string/address_header"
+            android:textSize="24sp"/>
+
+        <TextView
+            android:id="@+id/address_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:padding="24dp"
+            android:layout_gravity="center_horizontal"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/permits"
-            android:textSize="24sp"
-            android:paddingBottom="50sp"/>
+            android:text="@string/permits_header"
+            android:textSize="24sp"/>
+
+        <TextView
+            android:id="@+id/permits_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:padding="24dp"
+            android:layout_gravity="center_horizontal"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/my_spot"
-            android:textSize="24sp"
-            android:paddingBottom="50sp"/>
+            android:text="@string/my_spot_header"
+            android:textSize="24sp"/>
+
+        <TextView
+            android:id="@+id/my_spot_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:padding="24dp"
+            android:layout_gravity="center_horizontal" />
 
         <Button
             android:id="@+id/edit_account_button"
@@ -43,6 +64,7 @@
             android:layout_height="wrap_content"
             android:text="@string/edit_account_button"
             android:layout_gravity="center"
+            android:padding="24dp"
             android:textSize="24sp"/>
 
     </LinearLayout>
