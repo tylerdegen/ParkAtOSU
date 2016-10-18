@@ -3,6 +3,8 @@ package com.parkatosu.parkatosu;
 
 
 import android.app.Fragment;
+import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -62,6 +64,7 @@ public class signup extends Fragment implements OnClickListener {
         switch (view.getId()){
             case R.id.done_button:
                 createAccount();
+                startActivity(new Intent(getActivity(), MainActivity.class));
                 break;
             case R.id.cancel_button:
                 username.setText("");

@@ -12,8 +12,8 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_in_register">Register</string>
+    <string name="action_sign_in">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
@@ -25,8 +25,9 @@
     <string name="permits_header">Permits</string>
     <string name="my_spot_header">My Spot</string>
     <string name="edit_account_button">Edit Account</string>
-    <string name="address_text_view"/>
+    <string name="address_text_view" />
 
     <string name="logged_out">Logged Out.</string>
     <string name="set_location_button">Set Location</string>
+    <string name="World">World</string>
 </resources>
