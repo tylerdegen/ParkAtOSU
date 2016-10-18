@@ -20,13 +20,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".loading" />
+        <!-- <activity android:name=".signup"></activity> -->
+        <activity android:name=".MainActivity" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -41,26 +47,17 @@
 
         <activity
             android:name=".WhereTo"
-            android:label="@string/title_activity_where_to">
-        </activity>
-        <activity android:name=".AccountActivity">
-        </activity>
-        <activity android:name=".AccountEditActivity">
-        </activity>
-        <activity android:name=".SetParkedActivity">
-        </activity>
-        <activity android:name=".LogoutActivity">
-        </activity>
             android:label="@string/title_activity_where_to" />
+        <activity android:name=".AccountActivity" />
+        <activity android:name=".AccountEditActivity" />
+        <activity android:name=".SetParkedActivity" />
+        <activity android:name=".LogoutActivity" />
+        android:label="@string/title_activity_where_to" />
         <activity
             android:name=".Directions"
             android:label="@string/title_activity_directions" />
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login" />
         <activity android:name=".logout" />
-        <activity android:name=".loading" />
-        <activity android:name=".signup"></activity>
+        <activity android:name=".SignUpActivity"></activity>
     </application>
 
 </manifest>
