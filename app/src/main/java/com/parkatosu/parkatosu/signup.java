@@ -4,19 +4,15 @@ package com.parkatosu.parkatosu;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 public class signup extends Fragment implements OnClickListener {
@@ -44,8 +40,8 @@ public class signup extends Fragment implements OnClickListener {
         String conf = confirm.getText().toString();
         if ((pass.equals(conf))&&(!user.equals(""))&&(!password.equals(""))){
             this.dh = new DatabaseHelper(this.getActivity());
-            this.dh.insert(user, pass);
-            Toast.makeText(this.getActivity(),"new record inserted",Toast.LENGTH_SHORT).show();
+            this.dh.insertAccount(user, pass);
+            Toast.makeText(this.getActivity(),"New record inserted",Toast.LENGTH_SHORT).show();
         }
         else if(!pass.equals(conf)){
             new AlertDialog.Builder(this.getActivity()).setTitle("Error").setMessage("Passwords do not match")

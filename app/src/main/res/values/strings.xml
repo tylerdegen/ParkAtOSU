@@ -21,11 +21,15 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!-- Related to account menu -->
     <string name="address_header">Address</string>
     <string name="permits_header">Permits</string>
     <string name="my_spot_header">My Spot</string>
     <string name="edit_account_button">Edit Account</string>
+    <string name="edit_account_save">Save</string>
     <string name="address_text_view" />
+
 
     <string name="logged_out">Logged Out.</string>
     <string name="set_location_button">Set Location</string>

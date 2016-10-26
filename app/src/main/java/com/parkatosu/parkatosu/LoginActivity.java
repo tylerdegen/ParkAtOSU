@@ -74,7 +74,7 @@ public class LoginActivity extends FragmentActivity implements android.view.View
         String username=this.user.getText().toString();
         String password=this.pass.getText().toString();
         this.dh=new DatabaseHelper(this);
-        List<String> names=this.dh.selectAll(username,password);
+        List<String> names=this.dh.selectAll(username,password, "ACCOUNTS");
         if (names.size() > 0){
             SharedPreferences settings= PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor=settings.edit();
