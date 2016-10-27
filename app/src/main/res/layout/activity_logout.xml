@@ -19,4 +19,4 @@
         android:text="@string/logged_out"
 
         />
-</LinearLayout>
+    </LinearLayout>

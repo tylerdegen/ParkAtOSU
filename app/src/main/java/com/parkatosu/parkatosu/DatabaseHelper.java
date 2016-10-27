@@ -1,5 +1,6 @@
 package com.parkatosu.parkatosu;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,62 +12,84 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHelper {
-   private static final String DATABASE_NAME = "ParkAtOSU";
-   private static final int DATABASE_VERSION = 1;
-   private static final String TABLE_NAME = "Accounts";
-   private Context context;
-   private SQLiteDatabase db;
-   private SQLiteStatement insertStmt;
-   private static final String INSERT = "insert into " + TABLE_NAME + "(name, password) values (?, ?)" ;
-   
-   public DatabaseHelper(Context context) {
-      this.context = context;
-      ParkAtOSUOpenHelper openHelper = new ParkAtOSUOpenHelper(this.context);
-      this.db = openHelper.getWritableDatabase();
-      this.insertStmt = this.db.compileStatement(INSERT);
-   }
+    private static final String DATABASE_NAME = "ParkAtOSU";
+    private static final int DATABASE_VERSION = 1;
+    private static final String ACCOUNTS = "Accounts";
+    private Context context;
+    private SQLiteDatabase db;
+    private SQLiteStatement insertStmt;
+    private static final String INSERT = "insert into " + ACCOUNTS + "(name, password, address, permits, park_lat, park_long) values (?, ?, ?, ?, ?, ?)";
 
-   public long insert(String name, String password) {
-      this.insertStmt.bindString(1, name);
-      this.insertStmt.bindString(2, password);
-      return this.insertStmt.executeInsert();
-   }
-   public void deleteAll() {
+    public DatabaseHelper(Context context) {
+        this.context = context;
+        ParkAtOSUOpenHelper openHelper = new ParkAtOSUOpenHelper(this.context);
+        this.db = openHelper.getWritableDatabase();
+        this.insertStmt = this.db.compileStatement(INSERT);
+    }
 
-      this.db.delete(TABLE_NAME, null, null);
-   }
-  
-   public List<String> selectAll(String username, String password) {
-      List<String> list = new ArrayList<String>();
-      Cursor cursor = this.db.query(TABLE_NAME, new String[] { "name", "password" }, "name = '"+ username +"' AND password= '"+ password+"'", null, null, null, "name desc");
-      if (cursor.moveToFirst()) {
-        do {
-        	 list.add(cursor.getString(0));
-        	 list.add(cursor.getString(1));
-         } while (cursor.moveToNext()); 
-      }
-      if (cursor != null && !cursor.isClosed()) {
-         cursor.close();
-      }
-      return list;
-   }
-   
-   private static class ParkAtOSUOpenHelper extends SQLiteOpenHelper {
-      ParkAtOSUOpenHelper(Context context) {
-    	  super(context, DATABASE_NAME, null, DATABASE_VERSION);
-      }
+    public long insertAccount(String name, String password) {
+        this.insertStmt.bindString(1, name);
+        this.insertStmt.bindString(2, password);
+        return this.insertStmt.executeInsert();
+    }
 
-      @Override
-      public void onCreate(SQLiteDatabase db) {
-         db.execSQL("CREATE TABLE " + TABLE_NAME + "(id INTEGER PRIMARY KEY, name TEXT, password TEXT)");
-      }
+    public void updateValue(ContentValues newValues, String whereClause, String[] whereArgs){
+        this.db.update("ACCOUNTS", newValues, whereClause, whereArgs);
+    }
 
-      @Override
-      public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void deleteAll(String table) {
 
-         Log.w("Example", "Upgrading database; this will drop and recreate the tables.");
-         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-         onCreate(db);
-      }
-   }
+        this.db.delete(table, null, null);
+    }
+
+    public List<String> selectAll(String username, String password, String table) {
+        List<String> list = new ArrayList<String>();
+        Cursor cursor = this.db.query(table, new String[]{"name", "password"}, "name = '" + username + "' AND password= '" + password + "'", null, null, null, "name desc");
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(cursor.getString(0));
+                list.add(cursor.getString(1));
+            } while (cursor.moveToNext());
+        }
+        if (cursor != null && !cursor.isClosed()) {
+            cursor.close();
+        }
+        return list;
+    }
+
+    public List<String> selectProps(String username, String table){
+        List<String> list = new ArrayList<String>();
+        Cursor cursor = this.db.query(table, new String[]{"address", "permits", "park_lat", "park_long"}, "name = '" + username + "'", null, null, null,null);
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(cursor.getString(0));
+                list.add(cursor.getString(1));
+                list.add(String.valueOf(cursor.getFloat(2)));
+                list.add(String.valueOf(cursor.getFloat(3)));
+            } while (cursor.moveToNext());
+        }
+        if (cursor != null && !cursor.isClosed()) {
+            cursor.close();
+        }
+        return list;
+    }
+
+    private static class ParkAtOSUOpenHelper extends SQLiteOpenHelper {
+        ParkAtOSUOpenHelper(Context context) {
+            super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            db.execSQL("CREATE TABLE " + ACCOUNTS + "(id INTEGER PRIMARY KEY, name TEXT, password TEXT, address TEXT, permits TEXT, park_lat REAL, park_long REAL)");
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+            Log.w("Example", "Upgrading database; this will drop and recreate the tables.");
+            db.execSQL("DROP TABLE IF EXISTS " + ACCOUNTS);
+            onCreate(db);
+        }
+    }
 }
