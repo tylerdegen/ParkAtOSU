@@ -18,7 +18,7 @@ public class DatabaseHelper {
     private Context context;
     private SQLiteDatabase db;
     private SQLiteStatement insertStmt;
-    private static final String INSERT = "insert into " + ACCOUNTS + "(name, password, address, permits, my_spot) values (?, ?, ?, ?, ?)";
+    private static final String INSERT = "insert into " + ACCOUNTS + "(name, password, address, permits, park_lat, park_long) values (?, ?, ?, ?, ?, ?)";
 
     public DatabaseHelper(Context context) {
         this.context = context;
@@ -57,14 +57,15 @@ public class DatabaseHelper {
         return list;
     }
 
-    public List<String> selectProps(String username, String password, String table){
+    public List<String> selectProps(String username, String table){
         List<String> list = new ArrayList<String>();
-        Cursor cursor = this.db.query(table, new String[]{"address", "permits", "my_spot"}, "name = '" + username + "' AND password= '" + password + "'", null, null, null,null);
+        Cursor cursor = this.db.query(table, new String[]{"address", "permits", "park_lat", "park_long"}, "name = '" + username + "'", null, null, null,null);
         if (cursor.moveToFirst()) {
             do {
                 list.add(cursor.getString(0));
                 list.add(cursor.getString(1));
-                list.add(cursor.getString(2));
+                list.add(String.valueOf(cursor.getFloat(2)));
+                list.add(String.valueOf(cursor.getFloat(3)));
             } while (cursor.moveToNext());
         }
         if (cursor != null && !cursor.isClosed()) {
@@ -80,7 +81,7 @@ public class DatabaseHelper {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE " + ACCOUNTS + "(id INTEGER PRIMARY KEY, name TEXT, password TEXT, address TEXT, permits TEXT, my_spot TEXT)");
+            db.execSQL("CREATE TABLE " + ACCOUNTS + "(id INTEGER PRIMARY KEY, name TEXT, password TEXT, address TEXT, permits TEXT, park_lat REAL, park_long REAL)");
         }
 
         @Override

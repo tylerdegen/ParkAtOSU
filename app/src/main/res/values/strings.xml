@@ -30,6 +30,18 @@
     <string name="edit_account_save">Save</string>
     <string name="address_text_view" />
 
+    <string name="no_address">No address found.</string>
+    <string name="no_osu_permit">No permit found.</string>
+    <string name="no_spot">No spot found.</string>
+
+    <!-- OSU Permits -->
+    <string-array name="osu_permits_array">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+    </string-array>
+
 
     <string name="logged_out">Logged Out.</string>
     <string name="set_location_button">Set Location</string>
