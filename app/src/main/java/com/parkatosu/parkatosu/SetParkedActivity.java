@@ -47,11 +47,24 @@ public class SetParkedActivity extends AppCompatActivity implements LocationList
             @Override
             public void onClick(View v){
                 // instantiate the location manager, note you will need to request permissions in your manifest
-                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                //LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                 // get the last know location from your location manager.
                 String result ="initialized but never set";
-
                 boolean permission = true;
+
+                if (checkPermission()){
+                    Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (location != null) {
+                        result = "Address: " + Double.toString(location.getLatitude())
+                                + " " + Double.toString(location.getLongitude());
+                    } else {
+                        result = "location null :/";
+                    }
+                }
+                else{
+                    requestPermission();
+                    result = "permission requested";
+                }
                 /*permission = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                         PackageManager.PERMISSION_GRANTED &&
                         ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
