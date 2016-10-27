@@ -37,8 +37,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import com.google.android.gms.games.Games;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +52,24 @@ public class LoginActivity extends FragmentActivity implements android.view.View
     private EditText user;
     private EditText pass;
     private final static String OPT_NAME="name";
+    private boolean showLogOutMessage;
+    public static Intent newIntent(Context packageContext) {
+        return new Intent(packageContext, LoginActivity.class);
 
+    }
     @Override
     public void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
         FragmentManager.enableDebugLogging(true);
         setContentView(R.layout.activity_login);
-
+        showLogOutMessage = false;
+        Intent i = getIntent();
+        if (i != null) {
+            showLogOutMessage = i.getBooleanExtra("logout", false);
+            if (showLogOutMessage) {
+                Toast.makeText(this, "Logged Out.", Toast.LENGTH_SHORT).show();
+            }
+        }
         user=(EditText)findViewById(R.id.username);
         pass=(EditText)findViewById(R.id.password);
         android.view.View btnLogin=(Button)findViewById(R.id.email_sign_in_button);
@@ -74,7 +84,7 @@ public class LoginActivity extends FragmentActivity implements android.view.View
         String username=this.user.getText().toString();
         String password=this.pass.getText().toString();
         this.dh=new DatabaseHelper(this);
-        List<String> names=this.dh.selectAll(username,password);
+        List<String> names=this.dh.selectAll(username,password, "ACCOUNTS");
         if (names.size() > 0){
             SharedPreferences settings= PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor=settings.edit();
