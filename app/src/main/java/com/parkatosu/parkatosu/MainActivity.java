@@ -1,6 +1,7 @@
 package com.parkatosu.parkatosu;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,8 @@ public class MainActivity extends AppCompatActivity {
     private Button mGoParkButton;
     private Button mSetParkedButton;
     private Button mLogoutButton;
+    private Button mNotificationsButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         mGoParkButton = (Button) findViewById(R.id.park_button);
         mSetParkedButton = (Button) findViewById(R.id.set_parked_button);
         mLogoutButton = (Button) findViewById(R.id.logout_button);
+        mNotificationsButton = (Button) findViewById(R.id.notifications_button);
 
         mAccountButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -53,6 +57,15 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = LoginActivity.newIntent(MainActivity.this);
                 i.putExtra("logout",true);
                 startActivity(i);
+            }
+        });
+
+        mNotificationsButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                FragmentManager fm = getSupportFragmentManager();
+                NotificationsDialogFragment ndf = new NotificationsDialogFragment();
+                ndf.show(fm, "notifications");
             }
         });
 

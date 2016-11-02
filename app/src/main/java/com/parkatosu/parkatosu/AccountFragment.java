@@ -61,7 +61,7 @@ public class AccountFragment extends Fragment {
             if (propsList.get(0) != null) {
                 address.setText(propsList.get(0));
             } else {
-                address.setText(R.string.no_address);
+                address.setText(propsList.get(4) + propsList.get(5));
             }
 
             if (propsList.get(1) != null) {
