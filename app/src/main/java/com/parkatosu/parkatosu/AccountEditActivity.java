@@ -10,4 +10,5 @@ public class AccountEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_edit);
     }
+
 }

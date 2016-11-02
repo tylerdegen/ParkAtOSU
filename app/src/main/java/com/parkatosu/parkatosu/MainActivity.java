@@ -54,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        mSetParkedButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent i = SetParkedActivity.newIntent(MainActivity.this);
+                startActivity(i);
+            }
+        });
 
     }
 }
