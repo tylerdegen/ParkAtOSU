@@ -8,53 +8,11 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.parkatosu.parkatosu.AccountEditActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
-
-    <TextView
+    <FrameLayout
+        android:id="@+id/edit_account_fragment"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/address_header"
-        android:textSize="24sp"/>
-
-    <EditText
-        android:id="@+id/address_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:padding="24dp"
-        android:layout_gravity="center_horizontal"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/permits_header"
-        android:textSize="24sp"/>
-
-    <EditText
-        android:id="@+id/permits_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:padding="24dp"
-        android:layout_gravity="center_horizontal"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/my_spot_header"
-        android:textSize="24sp"/>
-
-    <EditText
-        android:id="@+id/my_spot_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:padding="24dp"
-        android:layout_gravity="center_horizontal" />
-    </LinearLayout>
+        android:layout_height="wrap_content" />
 </LinearLayout>
