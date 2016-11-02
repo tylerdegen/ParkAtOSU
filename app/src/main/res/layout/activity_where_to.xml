@@ -28,11 +28,10 @@
                       android:padding="24dp"
                       android:text="Current Location"
                 />
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:padding="24dp"
-                      android:text="Headed Location"
-                />
+            <Button android:id="@+id/update_loc_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UPDATE LOCATION"/>
             <Button android:id="@+id/go_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -75,15 +74,14 @@
               android:padding="24dp"
               android:text="Current Location"
               />
-        <TextView android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:padding="24dp"
-              android:text="Headed Location"
-            />
+        <Button android:id="@+id/update_location_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Update Location"/>
         <Button android:id="@+id/show_answer_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="GO"/>
+            android:text="TEST"/>
 
     </LinearLayout>
 
