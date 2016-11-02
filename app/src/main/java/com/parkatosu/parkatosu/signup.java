@@ -67,7 +67,7 @@ public class signup extends Fragment implements OnClickListener {
         switch (view.getId()){
             case R.id.done_button:
                 createAccount();
-                startActivity(new Intent(getActivity(), MainActivity.class));
+                startActivity(new Intent(getActivity(), LoginActivity.class));
                 break;
             case R.id.cancel_button:
                 username.setText("");
