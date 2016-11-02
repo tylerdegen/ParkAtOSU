@@ -4,7 +4,9 @@ package com.parkatosu.parkatosu;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.widget.EditText;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -20,6 +22,7 @@ public class signup extends Fragment implements OnClickListener {
     private EditText password;
     private EditText confirm;
     private DatabaseHelper dh;
+    private final static String OPT_NAME="name";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +44,10 @@ public class signup extends Fragment implements OnClickListener {
         if ((pass.equals(conf))&&(!user.equals(""))&&(!password.equals(""))){
             this.dh = new DatabaseHelper(this.getActivity());
             this.dh.insertAccount(user, pass);
+            SharedPreferences settings= PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+            SharedPreferences.Editor editor=settings.edit();
+            editor.putString(OPT_NAME, user);
+            editor.commit();
             Toast.makeText(this.getActivity(),"New record inserted",Toast.LENGTH_SHORT).show();
         }
         else if(!pass.equals(conf)){
@@ -60,7 +67,7 @@ public class signup extends Fragment implements OnClickListener {
         switch (view.getId()){
             case R.id.done_button:
                 createAccount();
-                startActivity(new Intent(getActivity(), MainActivity.class));
+                startActivity(new Intent(getActivity(), LoginActivity.class));
                 break;
             case R.id.cancel_button:
                 username.setText("");
