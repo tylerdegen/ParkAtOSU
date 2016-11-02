@@ -69,11 +69,19 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
             @Override
             public void onClick(View v) {
                 String message;
+
                 if (checkPermission()){
                     Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     if (location != null) {
                         message= "Address: " + Double.toString(location.getLatitude())
                                 + " " + Double.toString(location.getLongitude());
+
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        LatLng userCoord = new LatLng(latitude,longitude);
+
+                        mMap.addMarker(new MarkerOptions().position(userCoord).title("Marker in Columbus"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(userCoord));
                     } else {
                         message = "location null :/";
                     }
@@ -82,6 +90,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
                     requestPermission();
                     message = "permission requested";
                 }
+
                 Toast.makeText(getApplication(), message, Toast.LENGTH_LONG).show();
             }
         });
