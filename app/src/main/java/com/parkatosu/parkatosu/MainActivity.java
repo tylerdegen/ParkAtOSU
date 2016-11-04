@@ -1,9 +1,13 @@
 package com.parkatosu.parkatosu;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -14,12 +18,11 @@ public class MainActivity extends AppCompatActivity {
     private Button mSetParkedButton;
     private Button mLogoutButton;
     private Button mNotificationsButton;
-
+    private int REQUEST_CODE = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         mAccountButton = (Button) findViewById(R.id.account_button);
         mGoParkButton = (Button) findViewById(R.id.park_button);
@@ -70,4 +73,5 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
 }

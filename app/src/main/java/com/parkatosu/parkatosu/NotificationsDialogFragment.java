@@ -1,8 +1,12 @@
 package com.parkatosu.parkatosu;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,10 +23,13 @@ import java.util.ArrayList;
 public class NotificationsDialogFragment extends DialogFragment{
     private ArrayList mSelectedItems;
     private DatabaseHelper dh;
+    private int REQUEST_CODE = 0;
+    private Context context;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mSelectedItems = new ArrayList();  // Where we track the selected items
         dh = new DatabaseHelper(getActivity());
+        context = this.getContext();
 
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -72,6 +79,8 @@ public class NotificationsDialogFragment extends DialogFragment{
                         dh.updateValue(values, "name = ?", usernameArg);
 
                         Toast.makeText(getActivity(),"Saved Notification Preferences!",Toast.LENGTH_SHORT).show();
+
+                        setAlarm();
                         dialog.dismiss();
                     }
                 })
@@ -83,5 +92,19 @@ public class NotificationsDialogFragment extends DialogFragment{
                 });
         // Create the AlertDialog object and return it
         return builder.create();
+    }
+
+    private void setAlarm(){
+        Log.d("NotificationsDialog", "Setting Alarm for notification.");
+
+        Intent intent = new Intent(this.getActivity(), NotificationReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), REQUEST_CODE, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
+        System.out.println("Time Total ----- "+(System.currentTimeMillis()));
+
+
     }
 }
