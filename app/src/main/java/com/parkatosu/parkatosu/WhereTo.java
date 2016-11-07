@@ -87,10 +87,6 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
                Toast.makeText(getApplication(), toast_message, Toast.LENGTH_LONG).show();
            }
         });
-        //TODO USE GEOCODER TO GET ADDRESS FROM THE EDIT TEXT, CONVERT TO GPS,
-        //AND SET ON MAP
-        //THERE SHOULD ALSO BE A TEXTVIEW WITH A REVERSE GEOCODED ADDRESS I THINK
-
 
         mGoButton = (Button) findViewById(R.id.go_button);
         mGoButton.setOnClickListener(new View.OnClickListener(){
@@ -99,7 +95,6 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
                 //start activity
                 Intent i = new Intent(WhereTo.this, Directions.class);
                 startActivity(i);
-
             }
         });
 
@@ -107,28 +102,20 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
         mUpdateLocButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                String message;
+                String message ="default";
 
-                if (checkPermission()){
-                    Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    if (location != null) {
-                        message= "Address: " + Double.toString(location.getLatitude())
-                                + " " + Double.toString(location.getLongitude());
+                Location location = getLocation();
 
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
-                        LatLng userCoord = new LatLng(latitude,longitude);
-                        mMap.clear();
+                if (location != null){
+                    message= "Address: " + Double.toString(location.getLatitude())
+                            + " " + Double.toString(location.getLongitude());
 
-                        mMap.addMarker(new MarkerOptions().position(userCoord).title("Marker in Columbus"));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(userCoord));
-                    } else {
-                        message = "location null :/";
-                    }
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    updateMap(latitude, longitude);
                 }
                 else{
-                    requestPermission();
-                    message = "permission requested";
+                    message="location null :/";
                 }
 
                 Toast.makeText(getApplication(), message, Toast.LENGTH_LONG).show();
@@ -256,7 +243,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
         }
     }
 
-    private Location getLatLong(){
+    private Location getLocation(){
         String result = "";
         Location location = null;
         if (checkPermission()){
@@ -277,7 +264,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
             result = "permission requested";
             //Toast.makeText(getApplication(), result, Toast.LENGTH_LONG).show();
         }
-        Toast.makeText(getApplication(), result, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplication(), result, Toast.LENGTH_LONG).show();
 
         return location;
     }
