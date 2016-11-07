@@ -99,12 +99,68 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
         });
 
         mUpdateLocButton = (Button) findViewById(R.id.update_loc_button);
+
         mUpdateLocButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                String message ="default";
+                String message;
 
-                Location location = getLocation();
+                if (checkPermission()){
+                    Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (location != null) {
+                        message= "Address: " + Double.toString(location.getLatitude())
+                                + " " + Double.toString(location.getLongitude());
+
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        LatLng userCoord = new LatLng(latitude,longitude);
+                        mMap.clear();
+
+                        mMap.addMarker(new MarkerOptions().position(userCoord).title("Marker in Columbus"));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(userCoord));
+                    } else {
+                        message = "location null :/";
+                    }
+                }
+                else{
+                    requestPermission();
+                    message = "permission requested";
+                }
+
+                Toast.makeText(getApplication(), message, Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+        /*
+        mUpdateLocButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                String result ="default";
+
+                if (checkPermission()){
+                    Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    if (location != null) {
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+
+                        result = "Address: " + Double.toString(location.getLatitude())
+                                + " " + Double.toString(location.getLongitude());
+                    } else {
+                        result = "location null on updateLoc :/";
+                        Toast.makeText(getApplication(), result, Toast.LENGTH_LONG).show();
+                    }
+                }
+                else{
+                    requestPermission();
+                    result = "permission requested";
+                    Toast.makeText(getApplication(), result, Toast.LENGTH_LONG).show();
+                }
+
+                /*
+
+                Location location = getLocation(locationManager);
 
                 if (location != null){
                     message= "Address: " + Double.toString(location.getLatitude())
@@ -115,14 +171,16 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
                     updateMap(latitude, longitude);
                 }
                 else{
-                    message="location null :/";
+                    message="location null on updateLoc click :/";
                 }
 
-                Toast.makeText(getApplication(), message, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplication(), result, Toast.LENGTH_LONG).show();
             }
         });
 
     }
+
+*/
 
     @Override
     public void onStart(){
@@ -177,7 +235,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
                 result = "Address: " + Double.toString(location.getLatitude())
                         + " " + Double.toString(location.getLongitude());
             } else {
-                result = "location null :/";
+                result = "location null on getMapReady :/";
                 Toast.makeText(getApplication(), result, Toast.LENGTH_LONG).show();
             }
         }
@@ -243,7 +301,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
         }
     }
 
-    private Location getLocation(){
+    private Location getLocation(LocationManager locationManager){
         String result = "";
         Location location = null;
         if (checkPermission()){
@@ -255,7 +313,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
                 result = "Address: " + Double.toString(location.getLatitude())
                         + " " + Double.toString(location.getLongitude());
             } else {
-                result = "location null :/";
+                result = "location null on getLocation :/";
                 //Toast.makeText(getApplication(), result, Toast.LENGTH_LONG).show();
             }
         }
@@ -265,6 +323,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
             //Toast.makeText(getApplication(), result, Toast.LENGTH_LONG).show();
         }
         //Toast.makeText(getApplication(), result, Toast.LENGTH_LONG).show();
+
 
         return location;
     }
