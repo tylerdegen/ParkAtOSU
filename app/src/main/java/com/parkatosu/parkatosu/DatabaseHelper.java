@@ -76,6 +76,18 @@ public class DatabaseHelper {
         return list;
     }
 
+    public String selectPermit(String username, String table){
+        Cursor cursor = this.db.query(table, new String[]{"permits"}, "name = '" + username + "'", null, null, null,null);
+        String permit = null;
+        if (cursor.moveToFirst()) {
+            permit = cursor.getString(0);
+        }
+        if (cursor != null && !cursor.isClosed()) {
+            cursor.close();
+        }
+        return permit;
+    }
+
     private static class ParkAtOSUOpenHelper extends SQLiteOpenHelper {
         ParkAtOSUOpenHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);

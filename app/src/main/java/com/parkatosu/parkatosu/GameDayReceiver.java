@@ -1,18 +1,16 @@
 package com.parkatosu.parkatosu;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 
 /**
- * Created by ajmcs on 11/4/2016.
+ * Created by ajmcs on 11/7/2016.
  */
-public class NotificationReceiver extends BroadcastReceiver{
+public class GameDayReceiver extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
 
         //Toast.makeText(context, "Repeating Alarm worked.", Toast.LENGTH_LONG).show();
@@ -32,8 +30,8 @@ public class NotificationReceiver extends BroadcastReceiver{
         // the addAction re-use the same intent to keep the example short
 
         NotificationCompat.Builder n  = new NotificationCompat.Builder(context)
-                .setContentTitle("STREET SWEEPING TOWING")
-                .setContentText("STARTS TOMORROW at 8AM for permit " + permit + " until 4PM.")
+                .setContentTitle("Game Days")
+                .setContentText("GAME DAY TOWING STARTS at 10AM for permit " + permit + " until 4PM.")
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentIntent(pIntent);
 

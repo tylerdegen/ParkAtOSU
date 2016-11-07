@@ -16,6 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by ajmcs on 11/2/2016.
@@ -23,13 +24,16 @@ import java.util.ArrayList;
 public class NotificationsDialogFragment extends DialogFragment{
     private ArrayList mSelectedItems;
     private DatabaseHelper dh;
+
     private int REQUEST_CODE = 0;
     private Context context;
+    private boolean streetSweeping = false;
+    private boolean gameDays = false;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mSelectedItems = new ArrayList();  // Where we track the selected items
-        dh = new DatabaseHelper(getActivity());
         context = this.getContext();
+        dh = new DatabaseHelper(getActivity());
 
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -60,15 +64,21 @@ public class NotificationsDialogFragment extends DialogFragment{
 
                         if(mSelectedItems.contains(1)) {
                             values.put("ss_notify", "true");
+                            streetSweeping = true;
+                            System.out.println("streetSweeping = " + streetSweeping);
                         }else{
                             values.put("ss_notify", "false");
+                            streetSweeping = false;
 
                         }
 
                         if(mSelectedItems.contains(0)) {
                             values.put("gd_notify", "true");
+                            gameDays = true;
+                            System.out.println("gameDays = " + gameDays);
                         }else{
                             values.put("gd_notify", "false");
+                            gameDays = false;
 
                         }
 
@@ -95,15 +105,64 @@ public class NotificationsDialogFragment extends DialogFragment{
     }
 
     private void setAlarm(){
+        dh = new DatabaseHelper(getActivity());;
+
         Log.d("NotificationsDialog", "Setting Alarm for notification.");
+        SharedPreferences settings= PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String[] usernameArg = new String[1];
+        usernameArg[0] = settings.getString("name","");
+
+        String permit = dh.selectPermit(usernameArg[0], "ACCOUNTS");
 
         Intent intent = new Intent(this.getActivity(), NotificationReceiver.class);
+        intent.putExtra("permit", permit);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), REQUEST_CODE, intent, 0);
+        if (streetSweeping) {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), REQUEST_CODE, intent, 0);
 
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), pendingIntent);
-        System.out.println("Time Total ----- "+(System.currentTimeMillis()));
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+            //Street Sweeping Notification
+        /*Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 8);
+        calendar.set(Calendar.MINUTE, 00);
+        calendar.set(Calendar.SECOND, 00);
+        calendar.set(Calendar.DAY_OF_WEEK, 4);
+        calendar.set(Calendar.WEEK_OF_MONTH, 2);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);*/
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 12);
+            calendar.set(Calendar.MINUTE, 29);
+            calendar.set(Calendar.SECOND, 00);
+            //calendar.set(Calendar.DAY_OF_WEEK, 7);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            System.out.println("Time Total 1----- " + (System.currentTimeMillis()));
+        }
+
+        REQUEST_CODE = 1;
+        intent = new Intent(this.getActivity(), GameDayReceiver.class);
+        intent.putExtra("permit", permit);
+
+        if (gameDays){
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), REQUEST_CODE, intent, 0);
+
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+            //Game Days Notification
+        /*Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 8);
+        calendar.set(Calendar.MINUTE, 00);
+        calendar.set(Calendar.SECOND, 00);
+        calendar.set(Calendar.DAY_OF_WEEK, 7);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);*/
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 12);
+            calendar.set(Calendar.MINUTE, 31);
+            calendar.set(Calendar.SECOND, 00);
+            //calendar.set(Calendar.DAY_OF_WEEK, 7);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            System.out.println("Time Total 2 ----- " + (System.currentTimeMillis()));
+        }
 
 
     }
