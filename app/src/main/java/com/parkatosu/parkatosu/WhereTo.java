@@ -3,6 +3,8 @@ package com.parkatosu.parkatosu;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,6 +24,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 public class WhereTo extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
@@ -35,6 +42,8 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
     private GoogleMap mMap;
     private Button mGoButton;
     private Button mUpdateLocButton;
+    private Button mSetDestButton;
+    private EditText mHeadedDest;
 
     public static Intent newIntent(Context packageContext) {
         Intent i = new Intent(packageContext, WhereTo.class);
@@ -52,6 +61,36 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        mHeadedDest = (EditText) findViewById(R.id.headed_address);
+
+        mSetDestButton = (Button) findViewById(R.id.set_dest_button);
+        mSetDestButton.setOnClickListener(new View.OnClickListener(){
+           @Override
+            public void onClick(View v){
+               String headed_address = mHeadedDest.getText().toString();
+               //Toast.makeText(getApplication(), headed_address, Toast.LENGTH_LONG).show();
+               Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+               String toast_message = "default";
+               try {
+                   List<Address> addresses = null;
+                   addresses = geocoder.getFromLocationName(headed_address, 5);
+                   double dest_lat = addresses.get(0).getLatitude();
+                   double dest_long = addresses.get(0).getLongitude();
+                   toast_message = "Address: " + Double.toString(dest_lat)
+                           + " " + Double.toString(dest_long);
+                   updateMap(dest_lat,dest_long);
+               }
+               catch(IOException e){
+                   toast_message = e.toString();
+               }
+               Toast.makeText(getApplication(), toast_message, Toast.LENGTH_LONG).show();
+           }
+        });
+        //TODO USE GEOCODER TO GET ADDRESS FROM THE EDIT TEXT, CONVERT TO GPS,
+        //AND SET ON MAP
+        //THERE SHOULD ALSO BE A TEXTVIEW WITH A REVERSE GEOCODED ADDRESS I THINK
+
 
         mGoButton = (Button) findViewById(R.id.go_button);
         mGoButton.setOnClickListener(new View.OnClickListener(){
@@ -79,6 +118,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
                         double latitude = location.getLatitude();
                         double longitude = location.getLongitude();
                         LatLng userCoord = new LatLng(latitude,longitude);
+                        mMap.clear();
 
                         mMap.addMarker(new MarkerOptions().position(userCoord).title("Marker in Columbus"));
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(userCoord));
@@ -214,6 +254,40 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
         } else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_REQUEST_CODE);
         }
+    }
+
+    private Location getLatLong(){
+        String result = "";
+        Location location = null;
+        if (checkPermission()){
+            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location != null) {
+                //latitude = location.getLatitude();
+                //longitude = location.getLongitude();
+
+                result = "Address: " + Double.toString(location.getLatitude())
+                        + " " + Double.toString(location.getLongitude());
+            } else {
+                result = "location null :/";
+                //Toast.makeText(getApplication(), result, Toast.LENGTH_LONG).show();
+            }
+        }
+        else{
+            requestPermission();
+            result = "permission requested";
+            //Toast.makeText(getApplication(), result, Toast.LENGTH_LONG).show();
+        }
+        Toast.makeText(getApplication(), result, Toast.LENGTH_LONG).show();
+
+        return location;
+    }
+
+    private void updateMap(double latitude, double longitude){
+
+        LatLng userCoord = new LatLng(latitude,longitude);
+        mMap.clear();
+        mMap.addMarker(new MarkerOptions().position(userCoord).title("Marker in Columbus"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(userCoord));
     }
 
     //monitor for permission changes
