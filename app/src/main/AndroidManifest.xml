@@ -15,10 +15,9 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature android:name="android.hardware.location.network" />
-
-
 
     <application
         android:allowBackup="true"
@@ -63,7 +62,8 @@
             android:name=".Directions"
             android:label="@string/title_activity_directions" />
         <activity android:name=".logout" />
-        <activity android:name=".SignUpActivity"></activity>
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".LocationsActivity"></activity>
     </application>
 
 </manifest>
