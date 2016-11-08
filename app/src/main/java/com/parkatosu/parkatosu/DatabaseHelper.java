@@ -24,7 +24,7 @@ public class DatabaseHelper {
     private Context context;
     private SQLiteDatabase db;
     private SQLiteStatement insertStmt;
-    private static final String INSERT = "insert into " + ACCOUNTS + "(name, password, address, permits, park_lat, park_long) values (?, ?, ?, ?, ?, ?)";
+    private static final String INSERT = "insert into " + ACCOUNTS + "(name, password, address, permits, park_lat, park_long, ss_notify, gd_notify) values (?, ?, ?, ?, ?, ?, ?, ?)";
 
     public DatabaseHelper(Context context) {
         this.context = context;
@@ -65,19 +65,33 @@ public class DatabaseHelper {
 
     public List<String> selectProps(String username, String table) {
         List<String> list = new ArrayList<String>();
-        Cursor cursor = this.db.query(table, new String[]{"address", "permits", "park_lat", "park_long"}, "name = '" + username + "'", null, null, null, null);
+        Cursor cursor = this.db.query(table, new String[]{"address", "permits", "park_lat", "park_long", "ss_notify", "gd_notify"}, "name = '" + username + "'", null, null, null,null);
         if (cursor.moveToFirst()) {
             do {
                 list.add(cursor.getString(0));
                 list.add(cursor.getString(1));
                 list.add(String.valueOf(cursor.getFloat(2)));
                 list.add(String.valueOf(cursor.getFloat(3)));
+                list.add(cursor.getString(4));
+                list.add(cursor.getString(5));
             } while (cursor.moveToNext());
         }
         if (cursor != null && !cursor.isClosed()) {
             cursor.close();
         }
         return list;
+    }
+
+    public String selectPermit(String username, String table){
+        Cursor cursor = this.db.query(table, new String[]{"permits"}, "name = '" + username + "'", null, null, null,null);
+        String permit = null;
+        if (cursor.moveToFirst()) {
+            permit = cursor.getString(0);
+        }
+        if (cursor != null && !cursor.isClosed()) {
+            cursor.close();
+        }
+        return permit;
     }
 
     private static class ParkAtOSUOpenHelper extends SQLiteOpenHelper {
@@ -88,7 +102,7 @@ public class DatabaseHelper {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL("CREATE TABLE " + ACCOUNTS + "(id INTEGER PRIMARY KEY, name TEXT, password TEXT, address TEXT, permits TEXT, park_lat REAL, park_long REAL)");
+            db.execSQL("CREATE TABLE " + ACCOUNTS + "(id INTEGER PRIMARY KEY, name TEXT, password TEXT, address TEXT, permits TEXT, park_lat REAL, park_long REAL, ss_notify TEXT, gd_notify TEXT)");
             db.execSQL("CREATE TABLE " + LOCATIONS + "(id INTEGER PRIMARY KEY, name TEXT, lat FLOAT, long FLOAT, permit TEXT)");
         }
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="notifications_array">
+        <item>Street Sweeping</item>
+        <item>Game Days</item>
+    </string-array>
+
+    <!-- OSU Permits -->
+    <string-array name="osu_permits_array">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+    </string-array>
+</resources>

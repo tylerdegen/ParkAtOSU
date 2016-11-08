@@ -64,6 +64,26 @@
         <activity android:name=".logout" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LocationsActivity"></activity>
+        <activity android:name=".SignUpActivity"></activity>
+
+        <receiver android:name=".NotificationReceiver">
+
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED">
+                </action>
+            </intent-filter>
+
+        </receiver>
+
+        <receiver android:name=".GameDayReceiver">
+
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED">
+                </action>
+            </intent-filter>
+
+        </receiver>
+
     </application>
 
 </manifest>

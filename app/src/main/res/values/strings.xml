@@ -34,16 +34,13 @@
     <string name="no_osu_permit">No permit found.</string>
     <string name="no_spot">No spot found.</string>
 
-    <!-- OSU Permits -->
-    <string-array name="osu_permits_array">
-        <item>A</item>
-        <item>B</item>
-        <item>C</item>
-        <item>D</item>
-    </string-array>
 
 
     <string name="logged_out">Logged Out.</string>
     <string name="set_location_button">Set Location</string>
     <string name="World">World</string>
+    <string name="notifications_button">Notifications</string>
+    <string name="notifications_subscribe">Set Notifications</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 </resources>
