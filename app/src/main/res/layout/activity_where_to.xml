@@ -23,15 +23,37 @@
             android:gravity="center_horizontal"
             android:id="@+id/list">
 
+            <!--
+
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:padding="24dp"
                       android:text="Current Location"
                 />
+                -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:id="@+id/list2">
+                <EditText
+                    android:id="@+id/headed_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="24dp"
+                    android:inputType="text"
+                    android:hint="Where to?"/>
+
+                <Button android:id="@+id/set_dest_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Set Destination!"/>
+            </LinearLayout>
             <Button android:id="@+id/update_loc_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="UPDATE LOCATION"/>
+                    android:text="GET CURRENT LOCATION"/>
             <Button android:id="@+id/go_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
