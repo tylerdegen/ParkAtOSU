@@ -3,8 +3,12 @@ package com.parkatosu.parkatosu;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,9 +22,18 @@ public class MainActivity extends AppCompatActivity {
     private Button mSetParkedButton;
     private Button mLogoutButton;
     private Button mNotificationsButton;
+    private DatabaseHelper dh;
+    String permit;
     private int REQUEST_CODE = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        dh = new DatabaseHelper(this);
+        SharedPreferences settings= PreferenceManager.getDefaultSharedPreferences(this);
+        String[] usernameArg = new String[1];
+        usernameArg[0] = settings.getString("name","");
+
+        permit = dh.selectPermit(usernameArg[0], "ACCOUNTS");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -66,12 +79,24 @@ public class MainActivity extends AppCompatActivity {
         mNotificationsButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                FragmentManager fm = getSupportFragmentManager();
-                NotificationsDialogFragment ndf = new NotificationsDialogFragment();
-                ndf.show(fm, "notifications");
+                if (permit != null) {
+                    FragmentManager fm = getSupportFragmentManager();
+                    NotificationsDialogFragment ndf = new NotificationsDialogFragment();
+                    ndf.show(fm, "notifications");
+                }else{
+                    AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                    alertDialog.setTitle("No Permit Found");
+                    alertDialog.setMessage("Please specify a permit for your account in order to receive notifications.");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
+                }
             }
         });
 
     }
-
 }

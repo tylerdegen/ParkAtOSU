@@ -28,7 +28,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login">
+            android:label="Park@OSU">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -66,6 +66,15 @@
         <activity android:name=".SignUpActivity"></activity>
 
         <receiver android:name=".NotificationReceiver">
+
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED">
+                </action>
+            </intent-filter>
+
+        </receiver>
+
+        <receiver android:name=".GameDayReceiver">
 
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED">

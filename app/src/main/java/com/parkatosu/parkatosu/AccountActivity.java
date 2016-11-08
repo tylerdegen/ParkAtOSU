@@ -47,4 +47,10 @@ public class AccountActivity extends FragmentActivity implements View.OnClickLis
         }
     }
 
+    public void onBackPressed(){
+        Intent refresh = new Intent(this, MainActivity.class);
+        startActivity(refresh);
+        this.finish();
+    }
+
 }

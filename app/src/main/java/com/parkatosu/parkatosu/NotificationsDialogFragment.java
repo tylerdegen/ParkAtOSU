@@ -105,7 +105,7 @@ public class NotificationsDialogFragment extends DialogFragment{
     }
 
     private void setAlarm(){
-        dh = new DatabaseHelper(getActivity());;
+        dh = new DatabaseHelper(getActivity());
 
         Log.d("NotificationsDialog", "Setting Alarm for notification.");
         SharedPreferences settings= PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -116,13 +116,13 @@ public class NotificationsDialogFragment extends DialogFragment{
 
         Intent intent = new Intent(this.getActivity(), NotificationReceiver.class);
         intent.putExtra("permit", permit);
+        if (permit != null) {
+            if (streetSweeping) {
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), REQUEST_CODE, intent, 0);
 
-        if (streetSweeping) {
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), REQUEST_CODE, intent, 0);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-            //Street Sweeping Notification
+                //Street Sweeping Notification
         /*Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 8);
         calendar.set(Calendar.MINUTE, 00);
@@ -130,38 +130,38 @@ public class NotificationsDialogFragment extends DialogFragment{
         calendar.set(Calendar.DAY_OF_WEEK, 4);
         calendar.set(Calendar.WEEK_OF_MONTH, 2);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);*/
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 12);
-            calendar.set(Calendar.MINUTE, 29);
-            calendar.set(Calendar.SECOND, 00);
-            //calendar.set(Calendar.DAY_OF_WEEK, 7);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            System.out.println("Time Total 1----- " + (System.currentTimeMillis()));
-        }
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, 12);
+                calendar.set(Calendar.MINUTE, 30);
+                calendar.set(Calendar.SECOND, 00);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                System.out.println("Time Total 1----- " + (System.currentTimeMillis()));
+            }
 
-        REQUEST_CODE = 1;
-        intent = new Intent(this.getActivity(), GameDayReceiver.class);
-        intent.putExtra("permit", permit);
+            REQUEST_CODE = 1;
+            Intent intent2 = new Intent(this.getActivity(), GameDayReceiver.class);
+            intent2.putExtra("permit", permit);
 
-        if (gameDays){
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getActivity(), REQUEST_CODE, intent, 0);
+            if (gameDays) {
+                PendingIntent pendingIntent2 = PendingIntent.getBroadcast(this.getActivity(), REQUEST_CODE, intent2, 0);
 
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-            //Game Days Notification
+                //Game Days Notification
         /*Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 8);
         calendar.set(Calendar.MINUTE, 00);
         calendar.set(Calendar.SECOND, 00);
         calendar.set(Calendar.DAY_OF_WEEK, 7);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);*/
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 12);
-            calendar.set(Calendar.MINUTE, 31);
-            calendar.set(Calendar.SECOND, 00);
-            //calendar.set(Calendar.DAY_OF_WEEK, 7);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            System.out.println("Time Total 2 ----- " + (System.currentTimeMillis()));
+                Calendar calendar2 = Calendar.getInstance();
+                calendar2.set(Calendar.HOUR_OF_DAY, 12);
+                calendar2.set(Calendar.MINUTE, 30);
+                calendar2.set(Calendar.SECOND, 00);
+                //calendar2.set(Calendar.DAY_OF_WEEK, 7);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar2.getTimeInMillis(), pendingIntent2);
+                System.out.println("Time Total 2 ----- " + (System.currentTimeMillis()));
+            }
         }
 
 

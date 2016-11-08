@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
+import java.util.Date;
+
 /**
  * Created by ajmcs on 11/7/2016.
  */
@@ -30,16 +32,17 @@ public class GameDayReceiver extends BroadcastReceiver{
         // the addAction re-use the same intent to keep the example short
 
         NotificationCompat.Builder n  = new NotificationCompat.Builder(context)
-                .setContentTitle("Game Days")
-                .setContentText("GAME DAY TOWING STARTS at 10AM for permit " + permit + " until 4PM.")
+                .setContentTitle("GAME DAY TOWING")
+                .setContentText("STARTS at 10AM for permit " + permit + " until 4PM.")
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentIntent(pIntent);
-
 
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0, n.build());
+        int id = (int) ((new Date().getTime()+1 / 1000L) % Integer.MAX_VALUE);
+        System.out.println("gameday id: " + id);
+        notificationManager.notify(id, n.build());
 
 
     }

@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
+import java.util.Date;
+
 /**
  * Created by ajmcs on 11/4/2016.
  */
@@ -37,11 +39,13 @@ public class NotificationReceiver extends BroadcastReceiver{
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentIntent(pIntent);
 
-
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0, n.build());
+        int id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+        System.out.println("streetsweep id: " + id);
+
+        notificationManager.notify(id, n.build());
 
 
     }
