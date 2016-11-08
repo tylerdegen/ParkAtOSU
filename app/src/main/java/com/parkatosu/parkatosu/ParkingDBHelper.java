@@ -20,7 +20,7 @@ public class ParkingDBHelper extends SQLiteOpenHelper {
         private SQLiteDatabase parking;
         private final Context myContext;
 
-        public ParkingDBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+        public ParkingDBHelper(Context context) {
             super(context, DB_Name, null, 1);
             this.myContext = context;
         }
