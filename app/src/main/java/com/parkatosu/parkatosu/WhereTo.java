@@ -45,6 +45,11 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
     private Button mSetDestButton;
     private EditText mHeadedDest;
 
+
+    //defaults are 0; we can assume ohio users won't be headed to 0,0
+    double latitude = 0;
+    double longitude = 0;
+
     public static Intent newIntent(Context packageContext) {
         Intent i = new Intent(packageContext, WhereTo.class);
         return i;
@@ -75,11 +80,11 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
                try {
                    List<Address> addresses = null;
                    addresses = geocoder.getFromLocationName(headed_address, 5);
-                   double dest_lat = addresses.get(0).getLatitude();
-                   double dest_long = addresses.get(0).getLongitude();
-                   toast_message = "Address: " + Double.toString(dest_lat)
-                           + " " + Double.toString(dest_long);
-                   updateMap(dest_lat,dest_long);
+                   latitude = addresses.get(0).getLatitude();
+                   longitude = addresses.get(0).getLongitude();
+                   toast_message = "Address: " + Double.toString(latitude)
+                           + " " + Double.toString(longitude);
+                   updateMap(latitude,longitude);
                }
                catch(IOException e){
                    toast_message = e.toString();
@@ -93,8 +98,16 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
             @Override
             public void onClick(View v){
                 //start activity
-                Intent i = new Intent(WhereTo.this, Directions.class);
-                startActivity(i);
+                if (latitude == 0 && longitude == 0){
+
+                    Toast.makeText(getApplication(), "Invalid location", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Intent i = new Intent(WhereTo.this, Directions.class);
+                    i.putExtra("latitude", latitude);
+                    i.putExtra("longitude", longitude);
+                    startActivity(i);
+                }
             }
         });
 
@@ -111,8 +124,8 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
                         message= "Address: " + Double.toString(location.getLatitude())
                                 + " " + Double.toString(location.getLongitude());
 
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
                         LatLng userCoord = new LatLng(latitude,longitude);
                         mMap.clear();
 
@@ -222,8 +235,8 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         String result = "";
-        double latitude = 0;
-        double longitude = 0;
+        latitude = 0;
+        longitude = 0;
 
 
         if (checkPermission()){
