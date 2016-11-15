@@ -10,7 +10,11 @@ public class logout extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logout);
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction("com.package.logout");
+        sendBroadcast(broadcastIntent);
         Intent intent = new Intent(this, LoginActivity.class);
+
         finish();
     }
 }

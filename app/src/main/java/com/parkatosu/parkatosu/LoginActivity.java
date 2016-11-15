@@ -81,19 +81,7 @@ public class LoginActivity extends FragmentActivity implements android.view.View
         if (btnNewUser!=null) btnNewUser.setOnClickListener(this);
 
 
-//        ParkingDBHelper parkDH = new ParkingDBHelper(this);
-//
-//        try{
-//            parkDH.createDataBase();
-//        }catch (IOException ioe){
-//            throw new Error ("Unable to create database");
-//        }
-//
-//        try{
-//            parkDH.openDataBase();
-//        }catch (SQLiteException sqle){
-//            throw sqle;
-//        }
+
     }
 
     private void checkLogin(){

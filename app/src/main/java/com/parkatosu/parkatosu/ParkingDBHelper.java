@@ -1,6 +1,7 @@
 package com.parkatosu.parkatosu;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -15,8 +16,8 @@ import java.io.OutputStream;
  */
 public class ParkingDBHelper extends SQLiteOpenHelper {
 
-        private static final String DB_PATH = "/data/data/Parking/databases";
-        private static final String DB_Name = "Parking";
+        private static final String DB_PATH = "/data/data/ParkAtOSU/databases/";
+        private static final String DB_Name = "Parking.sql";
         private SQLiteDatabase parking;
         private final Context myContext;
 
@@ -45,7 +46,7 @@ public class ParkingDBHelper extends SQLiteOpenHelper {
             SQLiteDatabase checkDB = null;
 
             try {
-                String myPath = DB_PATH + DB_Name;
+                String myPath = parking.getPath() + DB_Name;
                 checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
             } catch (SQLiteException e) {
 
@@ -59,11 +60,20 @@ public class ParkingDBHelper extends SQLiteOpenHelper {
         }
 
         private void copyDataBase() throws IOException {
-            InputStream myInput = myContext.getAssets().open(DB_Name);
+            InputStream myInput;
+            String outFileName;
+            OutputStream myOutput;
+                 AssetManager mgr = myContext.getAssets();
+                myInput = mgr.open(DB_Name);
 
-            String outFileName = DB_PATH + DB_Name;
+            try{
+                outFileName = DB_PATH + DB_Name;
+                myOutput = new FileOutputStream(outFileName);
+            }catch (IOException e){
+                throw new Error("Nope");
+            }
 
-            OutputStream myOutput = new FileOutputStream(outFileName);
+
 
             byte[] buffer = new byte[1024];
             int length;

@@ -2,9 +2,11 @@ package com.parkatosu.parkatosu;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private int REQUEST_CODE = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         dh = new DatabaseHelper(this);
         SharedPreferences settings= PreferenceManager.getDefaultSharedPreferences(this);
         String[] usernameArg = new String[1];
@@ -73,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = LoginActivity.newIntent(MainActivity.this);
                 i.putExtra("logout",true);
                 startActivity(i);
+                finish();
             }
         });
         mSetParkedButton.setOnClickListener(new View.OnClickListener(){
