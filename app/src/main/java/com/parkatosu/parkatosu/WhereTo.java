@@ -309,6 +309,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
 
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
             Toast.makeText(this, "This app uses location data! Please enable!", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_REQUEST_CODE);
         } else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_REQUEST_CODE);
         }
