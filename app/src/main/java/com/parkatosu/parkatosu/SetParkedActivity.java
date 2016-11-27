@@ -1,18 +1,24 @@
 package com.parkatosu.parkatosu;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.List;
 
 
 public class SetParkedActivity extends AppCompatActivity implements LocationListener {
@@ -22,8 +28,10 @@ public class SetParkedActivity extends AppCompatActivity implements LocationList
     private final static int TIME_UPDATES = 5;
     private static final int PERMISSION_REQUEST_CODE = 1;
     private boolean LocationAvailable;
-
+    private TextView parkedLocation;
     private Button mSetParkedButton;
+
+    private DatabaseHelper dh;
 
     public static Intent newIntent(Context packageContext) {
         Intent i = new Intent(packageContext, SetParkedActivity.class);
@@ -42,6 +50,23 @@ public class SetParkedActivity extends AppCompatActivity implements LocationList
             requestPermission();
         }
 
+        dh = new DatabaseHelper(this);
+        parkedLocation = (TextView) findViewById(R.id.parked_location);
+
+        SharedPreferences settings= PreferenceManager.getDefaultSharedPreferences(this);
+        final String[] usernameArg = new String[1];
+        usernameArg[0] = settings.getString("name","");
+        List<String> list = dh.selectProps(usernameArg[0], "ACCOUNTS");
+        String parkLat = list.get(2);
+        String parkLong = list.get(3);
+        String loc = "Latitude: " + parkLat + ", Longitude: " + parkLong;
+        if (parkLat != null && parkLong != null){
+            parkedLocation.setText(loc);
+        }else{
+            parkedLocation.setText("No parked location found.");
+        }
+
+
         mSetParkedButton = (Button) findViewById(R.id.set_location_button);
         mSetParkedButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -57,6 +82,14 @@ public class SetParkedActivity extends AppCompatActivity implements LocationList
                     if (location != null) {
                         result = "Address: " + Double.toString(location.getLatitude())
                                 + " " + Double.toString(location.getLongitude());
+                        ContentValues values = new ContentValues();
+
+                        values.put("park_lat", Double.toString(location.getLatitude()));
+                        values.put("park_long", Double.toString(location.getLongitude()));
+                        dh.updateValue(values, "name = ?", usernameArg);
+                        Intent refresh = new Intent(SetParkedActivity.this, SetParkedActivity.class);
+                        startActivity(refresh);//Start the same Activity
+                        finish();
                     } else {
                         result = "location null :/";
                     }
