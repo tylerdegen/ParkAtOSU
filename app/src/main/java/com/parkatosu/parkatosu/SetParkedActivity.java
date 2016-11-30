@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,7 +20,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class SetParkedActivity extends AppCompatActivity implements LocationListener {
@@ -59,7 +64,34 @@ public class SetParkedActivity extends AppCompatActivity implements LocationList
         List<String> list = dh.selectProps(usernameArg[0], "ACCOUNTS");
         String parkLat = list.get(2);
         String parkLong = list.get(3);
+
+        double parkLatDoub = Double.parseDouble(parkLat);
+        double parkLongDoub = Double.parseDouble(parkLong);
+
         String loc = "Latitude: " + parkLat + ", Longitude: " + parkLong;
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(parkLatDoub, parkLongDoub, 1);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
+        if (addresses == null || addresses.size() == 0){
+
+        }
+        else{
+            Address address = addresses.get(0);
+            ArrayList<String> addressFragments = new ArrayList<String>();
+
+            for (int i=0; i < address.getMaxAddressLineIndex(); i++){
+                addressFragments.add(address.getAddressLine(i));
+            }
+            loc = addressFragments.get(0);
+
+        }
+
         if (parkLat != null && parkLong != null){
             parkedLocation.setText(loc);
         }else{
