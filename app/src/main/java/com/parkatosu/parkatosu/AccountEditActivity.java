@@ -2,13 +2,14 @@ package com.parkatosu.parkatosu;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-public class AccountEditActivity extends AppCompatActivity {
+public class AccountEditActivity extends FragmentActivity {
 
     public static Intent newIntent(Context packageContext) {
         return new Intent(packageContext, AccountEditActivity.class);

@@ -1,29 +1,45 @@
 package com.parkatosu.parkatosu;
 
+import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
-public class SetParkedActivity extends AppCompatActivity implements LocationListener {
+
+public class SetParkedActivity extends Activity implements LocationListener {
 
     private LocationManager locationManager;
     private final static int DISTANCE_UPDATES = 1;
     private final static int TIME_UPDATES = 5;
     private static final int PERMISSION_REQUEST_CODE = 1;
     private boolean LocationAvailable;
-
+    private TextView parkedLocation;
     private Button mSetParkedButton;
+
+    private DatabaseHelper dh;
 
     public static Intent newIntent(Context packageContext) {
         Intent i = new Intent(packageContext, SetParkedActivity.class);
@@ -42,6 +58,50 @@ public class SetParkedActivity extends AppCompatActivity implements LocationList
             requestPermission();
         }
 
+        dh = new DatabaseHelper(this);
+        parkedLocation = (TextView) findViewById(R.id.parked_location);
+
+        SharedPreferences settings= PreferenceManager.getDefaultSharedPreferences(this);
+        final String[] usernameArg = new String[1];
+        usernameArg[0] = settings.getString("name","");
+        List<String> list = dh.selectProps(usernameArg[0], "ACCOUNTS");
+        String parkLat = list.get(2);
+        String parkLong = list.get(3);
+
+        double parkLatDoub = Double.parseDouble(parkLat);
+        double parkLongDoub = Double.parseDouble(parkLong);
+
+        String loc = "Latitude: " + parkLat + ", Longitude: " + parkLong;
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = geocoder.getFromLocation(parkLatDoub, parkLongDoub, 1);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
+        if (addresses == null || addresses.size() == 0){
+
+        }
+        else{
+            Address address = addresses.get(0);
+            ArrayList<String> addressFragments = new ArrayList<String>();
+
+            for (int i=0; i < address.getMaxAddressLineIndex(); i++){
+                addressFragments.add(address.getAddressLine(i));
+            }
+            loc = addressFragments.get(0);
+
+        }
+
+        if (parkLat != null && parkLong != null){
+            parkedLocation.setText(loc);
+        }else{
+            parkedLocation.setText("No parked location found.");
+        }
+
+
         mSetParkedButton = (Button) findViewById(R.id.set_location_button);
         mSetParkedButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -52,11 +112,19 @@ public class SetParkedActivity extends AppCompatActivity implements LocationList
                 String result ="initialized but never set";
                 boolean permission = true;
 
-                if (checkPermission()){
+                if (checkPermission() && hasNetworkConnection()){
                     Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     if (location != null) {
                         result = "Address: " + Double.toString(location.getLatitude())
                                 + " " + Double.toString(location.getLongitude());
+                        ContentValues values = new ContentValues();
+
+                        values.put("park_lat", Double.toString(location.getLatitude()));
+                        values.put("park_long", Double.toString(location.getLongitude()));
+                        dh.updateValue(values, "name = ?", usernameArg);
+                        Intent refresh = new Intent(SetParkedActivity.this, SetParkedActivity.class);
+                        startActivity(refresh);//Start the same Activity
+                        finish();
                     } else {
                         result = "location null :/";
                     }
@@ -150,6 +218,7 @@ public class SetParkedActivity extends AppCompatActivity implements LocationList
 
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
             Toast.makeText(this, "This app uses location data! Please enable!", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_REQUEST_CODE);
         } else {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},PERMISSION_REQUEST_CODE);
         }
@@ -178,5 +247,38 @@ public class SetParkedActivity extends AppCompatActivity implements LocationList
                 break;
         }
     }
+
+    private boolean hasNetworkConnection(){
+        /*
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        boolean isConnected = true;
+        boolean isWifiAvailable = networkInfo.isAvailable();
+        boolean isWifiConnected = networkInfo.isConnected();
+        networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        boolean isMobileAvailable = networkInfo.isAvailable();
+        boolean isMobileConnnected = networkInfo.isConnected();
+        isConnected = (isMobileAvailable&&isMobileConnnected) || (isWifiAvailable&&isWifiConnected);  
+        return(isConnected);
+        */
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = true;
+        if (activeNetwork != null) { // connected to the internet
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                // connected to wifi
+                //Toast.makeText(context, activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
+            } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                // connected to the mobile provider's data plan
+                //Toast.makeText(context, activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            isConnected = false;
+        }
+        return isConnected;
+    }
+
+
 
 }
