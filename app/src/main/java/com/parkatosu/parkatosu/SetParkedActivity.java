@@ -1,5 +1,6 @@
 package com.parkatosu.parkatosu;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class SetParkedActivity extends AppCompatActivity implements LocationListener {
+public class SetParkedActivity extends Activity implements LocationListener {
 
     private LocationManager locationManager;
     private final static int DISTANCE_UPDATES = 1;
