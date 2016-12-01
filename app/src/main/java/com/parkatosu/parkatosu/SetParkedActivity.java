@@ -11,6 +11,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -110,7 +112,7 @@ public class SetParkedActivity extends Activity implements LocationListener {
                 String result ="initialized but never set";
                 boolean permission = true;
 
-                if (checkPermission()){
+                if (checkPermission() && hasNetworkConnection()){
                     Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     if (location != null) {
                         result = "Address: " + Double.toString(location.getLatitude())
@@ -245,5 +247,38 @@ public class SetParkedActivity extends Activity implements LocationListener {
                 break;
         }
     }
+
+    private boolean hasNetworkConnection(){
+        /*
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        boolean isConnected = true;
+        boolean isWifiAvailable = networkInfo.isAvailable();
+        boolean isWifiConnected = networkInfo.isConnected();
+        networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        boolean isMobileAvailable = networkInfo.isAvailable();
+        boolean isMobileConnnected = networkInfo.isConnected();
+        isConnected = (isMobileAvailable&&isMobileConnnected) || (isWifiAvailable&&isWifiConnected);  
+        return(isConnected);
+        */
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = true;
+        if (activeNetwork != null) { // connected to the internet
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                // connected to wifi
+                //Toast.makeText(context, activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
+            } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                // connected to the mobile provider's data plan
+                //Toast.makeText(context, activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            isConnected = false;
+        }
+        return isConnected;
+    }
+
+
 
 }
