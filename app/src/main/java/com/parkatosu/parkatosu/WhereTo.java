@@ -109,6 +109,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
                     i.putExtra("latitude", latitude);
                     i.putExtra("longitude", longitude);
                     startActivity(i);
+                    finish();
                 }
             }
         });
@@ -132,7 +133,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
                         mMap.clear();
 
                         mMap.addMarker(new MarkerOptions().position(userCoord).title("Marker in Columbus"));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(userCoord));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCoord, 16));
                     } else {
                         message = "location null :/";
                     }
@@ -349,7 +350,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
         LatLng userCoord = new LatLng(latitude,longitude);
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(userCoord).title("Marker in Columbus"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(userCoord));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCoord, 16));
     }
 
     private boolean hasNetworkConnection(){

@@ -2,9 +2,12 @@ package com.parkatosu.parkatosu;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Debug;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,9 +19,9 @@ import java.io.OutputStream;
  */
 public class ParkingDBHelper extends SQLiteOpenHelper {
 
-        private static final String DB_PATH = "/data/data/ParkAtOSU/databases/";
-        private static final String DB_Name = "Parking.sql";
-        private SQLiteDatabase parking;
+        private static final String DB_PATH = "/data/data/com.parkatosu.parkatosu/databases/";
+        private static final String DB_Name = "Parking.db";
+        private static SQLiteDatabase myDataBase;
         private final Context myContext;
 
         public ParkingDBHelper(Context context) {
@@ -27,17 +30,20 @@ public class ParkingDBHelper extends SQLiteOpenHelper {
         }
 
 
-        //@Override
+
         public void createDataBase() throws IOException {
-            boolean dbExist = checkDataBase();
-            if (dbExist) {
-            } else {
-                this.getReadableDatabase();
-                try {
+            try {
+                boolean dbExist = checkDataBase();
+                if (dbExist) {
+                    //do nothing
+                } else {
+                    this.getReadableDatabase();
+
                     copyDataBase();
-                } catch (IOException e) {
-                    throw new Error("Error copying database");
+
                 }
+            } catch (IOException e) {
+                throw new Error("Error copying database");
             }
         }
 
@@ -46,10 +52,10 @@ public class ParkingDBHelper extends SQLiteOpenHelper {
             SQLiteDatabase checkDB = null;
 
             try {
-                String myPath = parking.getPath() + DB_Name;
+                String myPath = DB_PATH + DB_Name;
                 checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
             } catch (SQLiteException e) {
-
+                //database doesnt exist
             }
 
             if (checkDB != null) {
@@ -60,44 +66,44 @@ public class ParkingDBHelper extends SQLiteOpenHelper {
         }
 
         private void copyDataBase() throws IOException {
-            InputStream myInput;
-            String outFileName;
-            OutputStream myOutput;
-                 AssetManager mgr = myContext.getAssets();
-                myInput = mgr.open(DB_Name);
+            try {
+                InputStream myInput = myContext.getAssets().open(DB_Name);
+                String outFileName = DB_PATH + DB_Name;
+                OutputStream myOutput = new FileOutputStream(outFileName);
 
-            try{
-                outFileName = DB_PATH + DB_Name;
-                myOutput = new FileOutputStream(outFileName);
-            }catch (IOException e){
-                throw new Error("Nope");
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = myInput.read(buffer)) > 0) {
+                    myOutput.write(buffer, 0, length);
+                }
+
+                myOutput.flush();
+                myOutput.close();
+                myInput.close();
             }
+            catch (Exception e){
 
-
-
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = myInput.read(buffer)) > 0) {
-                myOutput.write(buffer, 0, length);
             }
-
-            myOutput.flush();
-            myOutput.close();
-            myInput.close();
         }
 
-        public void openDataBase() throws SQLiteException {
+        public static Cursor select(String query,String [] args) throws SQLException{
+            openDataBase();
+            return myDataBase.rawQuery(query,args);
+        }
+
+        public static void openDataBase() throws SQLiteException {
 
             String myPath = DB_PATH + DB_Name;
-            parking = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+            myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+
 
         }
 
         @Override
         public synchronized void close() {
 
-            if (parking != null) {
-                parking.close();
+            if (myDataBase != null) {
+                myDataBase.close();
             }
 
             super.close();

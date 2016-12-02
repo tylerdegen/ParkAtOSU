@@ -1,6 +1,7 @@
 package com.parkatosu.parkatosu;
 
 import android.content.Intent;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,15 +12,20 @@ public class loading extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_loading);
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_loading);
 
-    ParkingDBHelper park = new ParkingDBHelper(this);
-        try{
-            park.createDataBase();
-        }catch (IOException e){
-                throw new Error("Unable to create database");
-        }
+//    ParkingDBHelper park = new ParkingDBHelper(this);
+//        try{
+//            park.createDataBase();
+//        }catch (IOException e){
+//                throw new Error("Unable to create database");
+//        }
+//        try{
+//
+//        }catch(SQLException sqle) {
+//            throw sqle;
+//        }
 
 
     Thread welcome = new Thread() {

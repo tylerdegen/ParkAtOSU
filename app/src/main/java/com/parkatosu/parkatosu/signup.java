@@ -37,7 +37,8 @@ public class signup extends Fragment implements OnClickListener {
         return v;
     }
 
-    private void createAccount(){
+    private boolean createAccount(){
+        boolean success = false;
         String user = username.getText().toString();
         String pass = password.getText().toString();
         String conf = confirm.getText().toString();
@@ -49,6 +50,7 @@ public class signup extends Fragment implements OnClickListener {
             editor.putString(OPT_NAME, user);
             editor.commit();
             Toast.makeText(this.getActivity(),"New record inserted",Toast.LENGTH_SHORT).show();
+            success = true;
         }
         else if(!pass.equals(conf)){
             new AlertDialog.Builder(this.getActivity()).setTitle("Error").setMessage("Passwords do not match")
@@ -59,6 +61,7 @@ public class signup extends Fragment implements OnClickListener {
                         }
                     }).show();
         }
+        return success;
 
     }
 
@@ -66,9 +69,10 @@ public class signup extends Fragment implements OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.done_button:
-                createAccount();
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-                break;
+                if(createAccount()) {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    break;
+                }
             case R.id.cancel_button:
                 username.setText("");
                 password.setText("");
