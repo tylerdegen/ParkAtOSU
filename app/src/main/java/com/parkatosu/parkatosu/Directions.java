@@ -77,8 +77,9 @@ public class Directions extends FragmentActivity implements OnMapReadyCallback {
         mDoneButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent i = new Intent(Directions.this, MainActivity.class);
-                startActivity(i);
+                //Removed to prevent MainActivity.class from being ran multiple times concurrently.
+//                Intent i = new Intent(Directions.this, MainActivity.class);
+//                startActivity(i);
                 finish();
             }
         });
