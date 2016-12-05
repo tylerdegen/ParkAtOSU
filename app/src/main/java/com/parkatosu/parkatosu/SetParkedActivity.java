@@ -11,6 +11,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Debug;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -46,6 +47,7 @@ public class SetParkedActivity extends Activity implements LocationListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Debug.startMethodTracing("setparked");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_parked);
         LocationAvailable = false;
@@ -244,6 +246,13 @@ public class SetParkedActivity extends Activity implements LocationListener {
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        Debug.stopMethodTracing();
     }
 
 }
