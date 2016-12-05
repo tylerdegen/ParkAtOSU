@@ -8,6 +8,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -107,6 +109,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
                     i.putExtra("latitude", latitude);
                     i.putExtra("longitude", longitude);
                     startActivity(i);
+                    finish();
                 }
             }
         });
@@ -130,7 +133,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
                         mMap.clear();
 
                         mMap.addMarker(new MarkerOptions().position(userCoord).title("Marker in Columbus"));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(userCoord));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCoord, 16));
                     } else {
                         message = "location null :/";
                     }
@@ -318,7 +321,7 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
     private Location getLocation(LocationManager locationManager){
         String result = "";
         Location location = null;
-        if (checkPermission()){
+        if (checkPermission() && hasNetworkConnection()){
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (location != null) {
                 //latitude = location.getLatitude();
@@ -347,7 +350,26 @@ public class WhereTo extends FragmentActivity implements OnMapReadyCallback, Loc
         LatLng userCoord = new LatLng(latitude,longitude);
         mMap.clear();
         mMap.addMarker(new MarkerOptions().position(userCoord).title("Marker in Columbus"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(userCoord));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userCoord, 16));
+    }
+
+    private boolean hasNetworkConnection(){
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = true;
+        if (activeNetwork != null) { // connected to the internet
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
+                // connected to wifi
+                //Toast.makeText(context, activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
+            } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                // connected to the mobile provider's data plan
+                //Toast.makeText(context, activeNetwork.getTypeName(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            isConnected = false;
+        }
+        return isConnected;
     }
 
     //monitor for permission changes

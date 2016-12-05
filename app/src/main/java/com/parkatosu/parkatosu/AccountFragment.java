@@ -25,6 +25,7 @@ public class AccountFragment extends Fragment {
     private TextView permits;
     private TextView mySpot;
     private DatabaseHelper dh;
+    private static String permitLevel;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -65,7 +66,8 @@ public class AccountFragment extends Fragment {
             }
 
             if (propsList.get(1) != null) {
-                permits.setText(propsList.get(1));
+                 permits.setText(propsList.get(1));
+                permitLevel = propsList.get(1);
             } else {
                 permits.setText(R.string.no_osu_permit);
             }
@@ -76,5 +78,10 @@ public class AccountFragment extends Fragment {
                 mySpot.setText(R.string.no_spot);
             }
         }
+    }
+
+    public static String[] getPermitLevel(){
+        String [] permLevel = {permitLevel};
+        return permLevel;
     }
 }

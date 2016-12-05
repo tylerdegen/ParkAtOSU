@@ -115,6 +115,4 @@ public class DatabaseHelper {
         }
     }
 
-    //creates database of parking lots
-
 }

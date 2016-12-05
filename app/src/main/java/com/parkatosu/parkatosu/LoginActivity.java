@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteException;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -80,20 +81,23 @@ public class LoginActivity extends FragmentActivity implements android.view.View
         android.view.View btnNewUser=(Button)findViewById(R.id.email_sign_in_button_register);
         if (btnNewUser!=null) btnNewUser.setOnClickListener(this);
 
+        checkDatabase();
 
-//        ParkingDBHelper parkDH = new ParkingDBHelper(this);
-//
-//        try{
-//            parkDH.createDataBase();
-//        }catch (IOException ioe){
-//            throw new Error ("Unable to create database");
-//        }
-//
-//        try{
-//            parkDH.openDataBase();
-//        }catch (SQLiteException sqle){
-//            throw sqle;
-//        }
+    }
+
+    private void checkDatabase(){
+
+        ParkingDBHelper park = new ParkingDBHelper(this);
+        try{
+            park.createDataBase();
+        }catch (IOException e){
+                throw new Error("Unable to create database");
+        }
+        try{
+
+        }catch(SQLException sqle) {
+            throw sqle;
+        }
     }
 
     private void checkLogin(){

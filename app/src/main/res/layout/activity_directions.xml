@@ -38,6 +38,13 @@
                 android:layout_height="wrap_content"
                 android:text="DONE"/>
 
+        <fragment
+            android:name="com.parkatosu.parkatosu.AccountFragment"
+            android:layout_weight="0"
+            android:layout_width=".1mm"
+            android:layout_height=".1mm"
+            android:visibility = "gone"/>
+
     </LinearLayout>
 
 </LinearLayout>

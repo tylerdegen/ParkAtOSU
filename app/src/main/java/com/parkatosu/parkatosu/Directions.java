@@ -2,6 +2,7 @@ package com.parkatosu.parkatosu;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +17,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Directions extends FragmentActivity implements OnMapReadyCallback {
@@ -74,8 +77,10 @@ public class Directions extends FragmentActivity implements OnMapReadyCallback {
         mDoneButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent i = new Intent(Directions.this, MainActivity.class);
-                startActivity(i);
+                //Removed to prevent MainActivity.class from being ran multiple times concurrently.
+//                Intent i = new Intent(Directions.this, MainActivity.class);
+//                startActivity(i);
+                finish();
             }
         });
     }
@@ -106,7 +111,7 @@ public class Directions extends FragmentActivity implements OnMapReadyCallback {
             LatLng destination = closestLoc(current_loc);
 
             mMap.addMarker(new MarkerOptions().position(destination).title("destination"));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(destination));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(destination,16));
 
         }
         else {
@@ -133,27 +138,48 @@ public class Directions extends FragmentActivity implements OnMapReadyCallback {
 
     //returns closest location given current location
     public static LatLng closestLoc(LatLng latlng_current){
-        //qatar
-        LatLng test = new LatLng(25.3548, 51.1839);
-        //buffalo
-        LatLng test2 = new LatLng (42.8864, -78.8784);
-        //cleveland
+        String [] permitLevel = AccountFragment.getPermitLevel();
+        String query = null;
+        if (permitLevel[0].equals("C")) {
+            query = "SELECT lat, long FROM lots WHERE permit_level = 'C' ";
+        }
+        if (permitLevel[0].equals("B")) {
+            query = "SELECT lat, long FROM lots WHERE permit_level = 'C' UNION SELECT lat, long FROM lots WHERE permit_level = 'B'";
+        }
+        if (permitLevel[0].equals("A")) {
+            query = "SELECT lat, long FROM lots WHERE permit_level = 'C' UNION SELECT lat, long FROM lots WHERE permit_level = 'B' UNION SELECT lat, long FROM lots WHERE permit_level = 'A'";
+        }
+
+        Cursor cursor = ParkingDBHelper.select(query,null);
+        LatLng[]  coordinates = new LatLng [cursor.getCount()];
+        int j = 0;
+        while(cursor.moveToNext()){
+            coordinates[j] = new LatLng(cursor.getFloat(0),cursor.getFloat(1));
+            j++;
+        }
+//      used for testing
+//        //qatar
+//        LatLng test = new LatLng(25.3548, 51.1839);
+//        //buffalo
+//        LatLng test2 = new LatLng (42.8864, -78.8784);
+//        //cleveland
         LatLng test3 = new LatLng (41.4993, -81.6944);
-        LatLng closest = test;
-        double closest_dist = LatLngDist(test, latlng_current);
-
-        //this is where you'd have an array of latlngs from the database
-
-        LatLng[] coordinates;
-        int i = 0;
-        coordinates = new LatLng[3];
-        coordinates[0] = test;
-        coordinates[1] = test2;
-        coordinates[2] = test3;
+            LatLng closest = test3;
+            double closest_dist = LatLngDist(test3, latlng_current);
+//
+//
+//        //this is where you'd have an array of latlngs from the database
+//
+//        LatLng[] coordinates;
+//        int i = 0;
+//        coordinates = new LatLng[3];
+//        coordinates[0] = test;
+//        coordinates[1] = test2;
+//        coordinates[2] = test3;
 
         double test_dist;
 
-        for (i = 0; i < coordinates.length; i++){
+        for (int i = 0; i < coordinates.length; i++){
             test_dist = LatLngDist(coordinates[i], latlng_current);
             if (LatLngDist(coordinates[i], latlng_current) < closest_dist ){
                 closest = coordinates[i];
